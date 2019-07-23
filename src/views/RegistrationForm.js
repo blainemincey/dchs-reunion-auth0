@@ -1,6 +1,7 @@
 import React, {Fragment, Component} from "react";
-import {Button, Col, Container, Form, FormGroup, Input, Label, Row, FormFeedback, Alert} from "reactstrap";
+import {Button, Col, Container, Form, FormGroup, Input, Label, Row, FormFeedback} from "reactstrap";
 import {withRouter} from 'react-router-dom';
+import moment from 'moment';
 
 class RegistrationForm extends Component {
 
@@ -10,9 +11,7 @@ class RegistrationForm extends Component {
         this.state = {
             user: this.props.user,
             registrationData: '',
-            mobileNumberError: false,
-            venueError: false,
-            costError: false
+            mobileNumberError: false
         }
 
         this.mdbStitchGETWebhook = process.env.REACT_APP_MONGODB_STITCH_GET_WEBHOOK;
@@ -98,12 +97,8 @@ class RegistrationForm extends Component {
         e.preventDefault();
 
         let mobileNumberError = false;
-        let venueError = false;
-        let costError = false;
         this.setState({
-            mobileNumberError: mobileNumberError,
-            venueError: venueError,
-            costError: costError
+            mobileNumberError: mobileNumberError
         });
 
         let mobileNumber = e.target.mobileNumber.value;
@@ -121,24 +116,6 @@ class RegistrationForm extends Component {
             }
         }
 
-        let venue = e.target.venue.value;
-        if (venue.length < 1) {
-            console.log("No venue!");
-            this.setState({
-                venueError: true
-            });
-            return;
-        }
-
-        let cost = e.target.cost.value;
-        if (cost.length < 1) {
-            console.log("No cost!");
-            this.setState({
-                costError: true
-            });
-            return;
-        }
-
         const {user} = this.state;
 
         // Build out the JSON to submit
@@ -154,9 +131,7 @@ class RegistrationForm extends Component {
             state: e.target.state.value,
             postalCode: e.target.postalCode.value,
             country: e.target.country.value,
-            guestName: e.target.guestName.value,
-            venue: e.target.venue.value,
-            cost: e.target.cost.value
+            guestName: e.target.guestName.value
         };
 
         this.postRegistration(registrationData);
@@ -165,31 +140,15 @@ class RegistrationForm extends Component {
 
     render() {
 
-        const {user, registrationData, mobileNumberError, venueError, costError} = this.state;
+        const {user, registrationData, mobileNumberError} = this.state;
 
-        let dvilleChecked;
-        if (registrationData.venue === 'Douglasville') {
-            dvilleChecked = true;
-        }
+        let updateTs = '';
+        if (registrationData.dateUpdatedTS) {
+            let updateDate = new Date(parseInt(registrationData.dateUpdatedTS));
+            let updateTsMoment = moment(updateDate).format('MMMM Do YYYY, h:mm:ss a');
+            console.log(updateTsMoment);
 
-        let atlChecked;
-        if (registrationData.venue === 'Atlanta') {
-            atlChecked = true;
-        }
-
-        let anyChecked;
-        if (registrationData.venue === 'Anywhere') {
-            anyChecked = true;
-        }
-
-        let costYesChecked;
-        if (registrationData.cost === 'Yes') {
-            costYesChecked = true;
-        }
-
-        let costNoChecked;
-        if (registrationData.cost === 'No') {
-            costNoChecked = true;
+            updateTs = <p className='profileUpdated'><b>Updated:</b> {updateTsMoment}</p>;
         }
 
         let mobileNumberErrorDiv = '';
@@ -200,25 +159,18 @@ class RegistrationForm extends Component {
             invalidMobile = true;
         }
 
-        let venueErrorDiv = '';
-        if (venueError) {
-            venueErrorDiv =
-                <Alert color="danger">
-                    Please choose a venue!!
-                </Alert>;
-        }
-
-        let costErrorDiv = '';
-        if (costError) {
-            costErrorDiv =
-                <Alert color="danger">
-                    Please answer Yes or No!
-                </Alert>;
-        }
-
         return (
             <Fragment>
-                <h6>Registration Profile: {user.email}</h6>
+                <Container>
+                    <Row>
+                        <Col>
+                            <p className='profile'><b>Profile:</b> {user.email}</p>
+                        </Col>
+                        <Col>
+                            {updateTs}
+                        </Col>
+                    </Row>
+                </Container>
                 <Container>
                     <div className='fa-border'>
                         <Form className="form" onSubmit={(e) => this.submitForm(e)}>
@@ -299,53 +251,6 @@ class RegistrationForm extends Component {
                                         <Label for="guestName">Guest Name</Label>
                                         <Input type="guestName" name="guestName"
                                                defaultValue={registrationData.guestName}/>
-                                    </Col>
-                                </Row>
-                            </FormGroup>
-                            <FormGroup tag="fieldset">
-                                <Row>
-                                    <Col>
-                                        <legend>Venue Preference</legend>
-                                        {venueErrorDiv}
-                                        <FormGroup>
-                                            <Label>
-                                                <Input defaultChecked={dvilleChecked}
-                                                       type="radio" value="Douglasville" name="venue"/>{' '}
-                                                In or around Douglasville
-                                            </Label>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label>
-                                                <Input defaultChecked={atlChecked}
-                                                       type="radio" value="Atlanta" name="venue"/>{' '}
-                                                In or around Atlanta
-                                            </Label>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label>
-                                                <Input type="radio" defaultChecked={anyChecked}
-                                                       value="Anywhere" name="venue"/>{' '}
-                                                As long as my friends are there, I will drive any distance in Georgia :)
-                                            </Label>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col>
-                                        <legend>Ticket Price - Would ticket price affect your venue preference?</legend>
-                                        {costErrorDiv}
-                                        <FormGroup>
-                                            <Label>
-                                                <Input defaultChecked={costYesChecked}
-                                                       type="radio" value="Yes" name="cost"/>{' '}
-                                                Yes
-                                            </Label>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label>
-                                                <Input defaultChecked={costNoChecked}
-                                                       type="radio" value="No" name="cost"/>{' '}
-                                                No
-                                            </Label>
-                                        </FormGroup>
                                     </Col>
                                 </Row>
                             </FormGroup>

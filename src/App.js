@@ -10,8 +10,10 @@ import Home from "./views/Home";
 import Profile from "./views/Profile";
 import Registration from "./views/Registration";
 import Success from "./views/Success";
+import PaymentSuccess from "./views/PaymentSuccess";
 import Error from "./views/Error";
 import Questions from "./views/Questions";
+import Payment from './views/Payment';
 import { useAuth0 } from "./react-auth0-spa";
 
 // styles
@@ -37,8 +39,10 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path="/registration" exact component={Registration} />
             <Route path="/success" exact component={Success} />
+            <Route path="/paymentsuccess" exact component={PaymentSuccess} />
             <Route path="/error" exact component={Error} />
             <Route path="/questions" exact component={Questions}/>
+            <Route path="/payment" exact component={Payment}/>
             <PrivateRoute path="/profile" component={Profile} />
           </Switch>
         </Container>

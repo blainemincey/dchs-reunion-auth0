@@ -33,3 +33,25 @@
 .form{
   padding: 1em;
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+/* Thick border */
+hr.myline {
+  border: 1px solid;
+}
+
+p.profileUpdated {
+  font-size: medium;
+  text-align: right;
+}
+
+p.profile {
+  text-align: left;
+  font-size: medium;
+}

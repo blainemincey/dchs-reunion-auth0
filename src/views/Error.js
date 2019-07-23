@@ -6,9 +6,9 @@ const Error = () => {
         <Fragment>
             <Alert className="text-center" color="error">
                 <h4>Error</h4>
-                There was a problem with updating your Registration Profile.
+                Yikes!  We are experiencing a problem!
             </Alert>
-            <p>Please try again.  If this error persists, please use the Questions link in the navigation bar above.</p>
+            <p>Please try again.  If this error persists, please use the email address indicated in the footer below.</p>
             <hr/>
         </Fragment>
     );
