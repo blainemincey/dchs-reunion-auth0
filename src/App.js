@@ -21,6 +21,7 @@ import "./App.css";
 
 // fontawesome
 import initFontAwesome from "./utils/initFontAwesome";
+import TotalRegistrations from "./views/TotalRegistrations";
 initFontAwesome();
 
 const App = () => {
@@ -37,12 +38,13 @@ const App = () => {
         <Container className="flex-grow-1 mt-3">
           <Switch>
             <Route path="/" exact component={Home} />
-            <Route path="/registration" exact component={Registration} />
-            <Route path="/success" exact component={Success} />
-            <Route path="/paymentsuccess" exact component={PaymentSuccess} />
-            <Route path="/error" exact component={Error} />
-            <Route path="/questions" exact component={Questions}/>
-            <Route path="/payment" exact component={Payment}/>
+            <PrivateRoute path="/registration" exact component={Registration} />
+            <PrivateRoute path="/success" exact component={Success} />
+            <PrivateRoute path="/paymentsuccess" exact component={PaymentSuccess} />
+            <PrivateRoute path="/error" exact component={Error} />
+            <PrivateRoute path="/questions" exact component={Questions}/>
+            <PrivateRoute path="/payment" exact component={Payment}/>
+            <PrivateRoute path="/totalregistrations" exact component={TotalRegistrations} />
             <PrivateRoute path="/profile" component={Profile} />
           </Switch>
         </Container>
